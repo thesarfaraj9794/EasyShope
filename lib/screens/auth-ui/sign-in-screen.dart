@@ -1,0 +1,276 @@
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
+import 'package:get/get.dart';
+import 'package:lottie/lottie.dart';
+import 'package:sarfibazaar/controllers/sign-in-controller.dart';
+import 'package:sarfibazaar/screens/auth-ui/forget-password-screen.dart';
+import 'package:sarfibazaar/screens/auth-ui/sign-up-screen.dart';
+import 'package:sarfibazaar/screens/user-panel/main-screen.dart';
+// Assuming the path is correct based on the original code
+import 'package:sarfibazaar/utils/app-constant.dart';
+
+class SigninScreen extends StatefulWidget {
+  const SigninScreen({super.key});
+
+  @override
+  State<SigninScreen> createState() => _SigninScreenState();
+}
+
+class _SigninScreenState extends State<SigninScreen> {
+  // Use RxBool for reactive password visibility toggle
+  final RxBool _isPasswordVisible = false.obs;
+  final SignInController signInController=Get.put(SignInController());
+  TextEditingController userEmail=TextEditingController();
+  TextEditingController userPassword=TextEditingController();
+
+  @override
+  Widget build(BuildContext context) {
+    return KeyboardVisibilityBuilder(
+      builder: (context, isKeyboardVisible) {
+        return Scaffold(
+          appBar: AppBar(
+            backgroundColor: AppConstant.appScendoryColor,
+            centerTitle: true,
+            title: const Text(
+              "Sign in",
+              style: TextStyle(color: Colors.white), // App bar title color for contrast
+            ),
+            iconTheme: const IconThemeData(color: Colors.white), // Ensures back button is visible
+          ),
+          // Wrapped the body content in SingleChildScrollView to prevent overflow
+          body: SingleChildScrollView(
+            // Added overall horizontal padding for better screen fit
+            padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 20.0),
+            child: SizedBox(
+              // Ensures the content takes full available width on any screen size
+              width: Get.width, 
+              child: Column(
+                // Ensures items are aligned center horizontally
+                crossAxisAlignment: CrossAxisAlignment.center,
+                // Aligns content to start from the top, important for scrollable views
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  // Lottie Animation/Welcome Text based on keyboard visibility
+                  isKeyboardVisible
+                      ? Padding(
+                          // Reduced vertical padding slightly for better fit when keyboard is open
+                          padding: const EdgeInsets.only(top: 15.0, bottom: 15.0),
+                          child: Text(
+                            "Welcome Back!",
+                            style: TextStyle(
+                              fontSize: 24.0,
+                              fontWeight: FontWeight.bold,
+                              color: AppConstant.appScendoryColor,
+                            ),
+                          ),
+                        )
+                      : Column(
+                          children: [
+                            // IMPROVED RESPONSIVENESS: Lottie height reduced to 20% for better fit on small/landscape screens
+                            Lottie.asset(
+                              'assets/images/splash-icon.json',
+                              height: Get.height * 0.20, 
+                            ),
+                          ],
+                        ),
+
+                  // Reduced spacing before Email field
+                  const SizedBox(height: 25.0),
+
+                  // Email Text Field
+                  TextFormField(
+                    controller: userEmail,
+                    cursorColor: AppConstant.appScendoryColor,
+                    keyboardType: TextInputType.emailAddress,
+                    decoration: InputDecoration(
+                      hintText: "Email",
+                      prefixIcon: Icon(Icons.email, color: AppConstant.appScendoryColor),
+                      contentPadding: const EdgeInsets.symmetric(vertical: 10.0, horizontal: 15.0),
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(10.0),
+                      ),
+                      focusedBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(10.0),
+                        borderSide: BorderSide(color: AppConstant.appScendoryColor, width: 2.0),
+                      ),
+                    ),
+                  ),
+
+                  // Reduced spacing before Password field
+                  const SizedBox(height: 15.0),
+
+                  // Password Text Field with Visibility Toggle
+                  Obx(
+                    () => TextFormField(
+                      controller: userPassword,
+                      cursorColor: AppConstant.appScendoryColor,
+                      obscureText: !_isPasswordVisible.value,
+                      keyboardType: TextInputType.visiblePassword,
+                      decoration: InputDecoration(
+                        hintText: "Password",
+                        prefixIcon: Icon(Icons.lock, color: AppConstant.appScendoryColor),
+                        // Password visibility toggle functionality
+                        suffixIcon: IconButton(
+                          icon: Icon(
+                            _isPasswordVisible.value ? Icons.visibility : Icons.visibility_off,
+                            color: AppConstant.appScendoryColor,
+                          ),
+                          onPressed: () {
+                            _isPasswordVisible.value = !_isPasswordVisible.value;
+                          },
+                        ),
+                        contentPadding: const EdgeInsets.symmetric(vertical: 10.0, horizontal: 15.0),
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(10.0),
+                        ),
+                        focusedBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(10.0),
+                          borderSide: BorderSide(color: AppConstant.appScendoryColor, width: 2.0),
+                        ),
+                      ),
+                    ),
+                  ),
+
+                  const SizedBox(height: 10.0),
+
+                  // Forgot Password
+                  Align(
+                    alignment: Alignment.centerRight,
+                    child: GestureDetector(
+                      onTap: () {
+                        Get.to(()=>ForgetPasswordScreen());
+                        // Handle Forgot Password navigation/logic
+                      },
+                      child: Text(
+                        "Forget password",
+                        style: TextStyle(
+                          color: AppConstant.appScendoryColor,
+                          fontWeight: FontWeight.bold,
+                          decoration: TextDecoration.underline,
+                        ),
+                      ),
+                    ),
+                  ),
+
+                  // Reduced spacing before Sign In Button
+                  const SizedBox(height: 25.0),
+
+                  // Sign In Button
+                  Material(
+                    child: Container(
+                      // Responsive Width: set to 45% of the screen width
+                      width: Get.width * 0.45,
+                      // Responsive Height: set to 1/18th of the screen height
+                      height: Get.height / 18, 
+                      decoration: BoxDecoration(
+                        color: AppConstant.appScendoryColor,
+                        borderRadius: BorderRadius.circular(20.0),
+                        boxShadow: [
+                          BoxShadow(
+                            color: AppConstant.appScendoryColor.withOpacity(0.5),
+                            spreadRadius: 1,
+                            blurRadius: 5,
+                            offset: const Offset(0, 3),
+                          ),
+                        ],
+                      ),
+                      child: TextButton(
+                        onPressed: () async{
+                          String email = userEmail.text.trim();
+                          String password=userPassword.text.trim();
+
+                          if(email.isEmpty||password.isEmpty){
+
+                             Get.snackbar("error ", "please enter all details",
+                             snackPosition: SnackPosition.BOTTOM,
+                             backgroundColor: AppConstant.appScendoryColor,
+                             colorText: AppConstant.appTextColor,
+                            
+                            );
+
+                          }else{
+                            UserCredential? userCredential = await signInController.signInMethod(
+                              email,
+                             password);
+                               if(userCredential!=null){
+                            if (userCredential.user!.emailVerified) {
+                            Get.snackbar(
+                              "Success",
+                              "login Successfully!",
+                              snackPosition: SnackPosition.BOTTOM,
+                              backgroundColor: AppConstant.appScendoryColor,
+                              colorText: AppConstant.appTextColor,
+                            );
+                            Get.offAll(() => MainScreen());
+                          } else {
+                            Get.snackbar(
+                              "Error",
+                              "Please verify your email before login",
+                              snackPosition: SnackPosition.BOTTOM,
+                              backgroundColor: AppConstant.appScendoryColor,
+                              colorText: AppConstant.appTextColor,
+                            );
+                          }
+
+                          }
+                          else{
+                             Get.snackbar(
+                              "Error",
+                              "Please try again",
+                              snackPosition: SnackPosition.BOTTOM,
+                              backgroundColor: AppConstant.appScendoryColor,
+                              colorText: AppConstant.appTextColor,
+                            );
+
+                          }
+                          }
+                        
+                          // _googleSignInController.signInWithGoogle();
+                        },
+                        child: const Text(
+                          "Sign in",
+                          style: TextStyle(color: Colors.white, fontSize: 18.0, fontWeight: FontWeight.bold),
+                        ),
+                      ),
+                    ),
+                  ),
+
+                  // Reduced spacing before Sign Up Link
+                  const SizedBox(height: 15.0),
+
+                  // Sign Up Link
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      const Text(
+                        "Don't have an account? ",
+                        style: TextStyle(color: Colors.grey),
+                      ),
+                      GestureDetector(
+                        onTap: () {
+                          // Handle Sign Up navigation
+                        },
+                        child: GestureDetector(
+                          onTap: () => Get.offAll( ()=> SignupScreen() ),
+                          child: Text(
+                            "Sign up",
+                            style: TextStyle(
+                              color: AppConstant.appScendoryColor,
+                              fontWeight: FontWeight.bold,
+                              decoration: TextDecoration.underline,
+                            ),
+                          ),
+                        ),
+                      )
+                    ],
+                  ),
+                ],
+              ),
+            ),
+          ),
+        );
+      },
+    );
+  }
+}
