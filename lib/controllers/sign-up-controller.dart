@@ -13,6 +13,7 @@ class SignUpController extends GetxController {
   var isPasswordVisible = false.obs;
 
   Future<UserCredential?> signUpMethod(
+    
     String userName,
     String userEmail,
     String userPhone,

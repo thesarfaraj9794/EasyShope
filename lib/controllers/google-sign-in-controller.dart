@@ -4,11 +4,16 @@ import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:get/get.dart';
 import 'package:sarfibazaar/models/user-model.dart';
 import 'package:sarfibazaar/screens/user-panel/main-screen.dart';
+import 'package:sarfibazaar/controllers/get-device-token-controller.dart';
 
 class GoogleSignInController extends GetxController {
   final FirebaseAuth _auth = FirebaseAuth.instance;
 
   Future<void> signInWithGoogle() async {
+     final GetDeviceTokenController getDeviceTokenController =
+       Get.put(GetDeviceTokenController());
+     
+
     try {
       EasyLoading.show(status: "Please wait...");
 
@@ -28,7 +33,7 @@ class GoogleSignInController extends GetxController {
           email: user.email ?? '',
           phone: user.phoneNumber ?? '',
           userImg: user.photoURL ?? '',
-          userDeviceToken: " ",
+          userDeviceToken: getDeviceTokenController.deviceToken.toString(),
           country: '',
           userAddress: '',
           street: '',

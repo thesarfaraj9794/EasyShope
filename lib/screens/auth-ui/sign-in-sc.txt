@@ -23,9 +23,7 @@ class _SigninScreenState extends State<SigninScreen> {
   // Use RxBool for reactive password visibility toggle
   final RxBool _isPasswordVisible = false.obs;
   final SignInController signInController=Get.put(SignInController());
-  //final GetUserDataController getUserDataController =Get.put(GetUserDataController());
-  final getUserDataController = Get.put(GetUserDataController(), permanent: true);
-
+  final GetUserDataController getUserDataController =Get.put(GetUserDataController());
   TextEditingController userEmail=TextEditingController();
   TextEditingController userPassword=TextEditingController();
 
@@ -162,226 +160,105 @@ class _SigninScreenState extends State<SigninScreen> {
                   const SizedBox(height: 25.0),
 
                   // Sign In Button
-                  // Material(
-                  //   child: Container(
-                  //     // Responsive Width: set to 45% of the screen width
-                  //     width: Get.width * 0.45,
-                  //     // Responsive Height: set to 1/18th of the screen height
-                  //     height: Get.height / 18, 
-                  //     decoration: BoxDecoration(
-                  //       color: AppConstant.appScendoryColor,
-                  //       borderRadius: BorderRadius.circular(20.0),
-                  //       boxShadow: [
-                  //         BoxShadow(
-                  //           color: AppConstant.appScendoryColor.withOpacity(0.5),
-                  //           spreadRadius: 1,
-                  //           blurRadius: 5,
-                  //           offset: const Offset(0, 3),
-                  //         ),
-                  //       ],
-                  //     ),
-                  //     child: TextButton(
-                  //       onPressed: () async{
-                  //         String email = userEmail.text.trim();
-                  //         String password=userPassword.text.trim();
-
-                  //         if(email.isEmpty||password.isEmpty){
-
-                  //            Get.snackbar("error ", "please enter all details",
-                  //            snackPosition: SnackPosition.BOTTOM,
-                  //            backgroundColor: AppConstant.appScendoryColor,
-                  //            colorText: AppConstant.appTextColor,
-                            
-                  //           );
-
-                  //         }else{
-                  //           UserCredential? userCredential = await signInController.signInMethod(
-                  //             email,
-                  //            password);
-
-                  //            var userData = await getUserDataController.getUserData(userCredential!.user!.uid);
-                             
-
-
-                  //              if(userCredential!=null){
-                  //           if (userCredential.user!.emailVerified) {
-
-                  //             if(userData[0]['isAdmin'] ==true){
-                  //                Get.snackbar(
-                  //             "Success",
-                  //             "login Successfully!",
-                  //             snackPosition: SnackPosition.BOTTOM,
-                  //             backgroundColor: AppConstant.appScendoryColor,
-                  //             colorText: AppConstant.appTextColor,
-                  //           );
-                  //               Get.offAll(()=>AdminMainScreen());
-                                
-
-                  //             }else{
-                  //                Get.offAll(()=>MainScreen());
-                  //                 Get.snackbar(
-                  //             "Success",
-                  //             "login Successfully!",
-                  //             snackPosition: SnackPosition.BOTTOM,
-                  //             backgroundColor: AppConstant.appScendoryColor,
-                  //             colorText: AppConstant.appTextColor,
-                  //           );
-                  //             }
-                           
-                  //           Get.offAll(() => MainScreen());
-                  //         } else {
-                  //           Get.snackbar(
-                  //             "Error",
-                  //             "Please verify your email before login",
-                  //             snackPosition: SnackPosition.BOTTOM,
-                  //             backgroundColor: AppConstant.appScendoryColor,
-                  //             colorText: AppConstant.appTextColor,
-                  //           );
-                  //         }
-
-                  //         }
-                  //         else{
-                  //            Get.snackbar(
-                  //             "Error",
-                  //             "Please try again",
-                  //             snackPosition: SnackPosition.BOTTOM,
-                  //             backgroundColor: AppConstant.appScendoryColor,
-                  //             colorText: AppConstant.appTextColor,
-                  //           );
-
-                  //         }
-                  //         }
-                        
-                  //         // _googleSignInController.signInWithGoogle();
-                  //       },
-                  //       child: const Text(
-                  //         "Sign in",
-                  //         style: TextStyle(color: Colors.white, fontSize: 18.0, fontWeight: FontWeight.bold),
-                  //       ),
-                  //     ),
-                  //   ),
-                  // ),
                   Material(
-  child: Container(
-    width: Get.width * 0.45,
-    height: Get.height / 18,
-    decoration: BoxDecoration(
-      color: AppConstant.appScendoryColor,
-      borderRadius: BorderRadius.circular(20.0),
-      boxShadow: [
-        BoxShadow(
-          color: AppConstant.appScendoryColor.withOpacity(0.5),
-          spreadRadius: 1,
-          blurRadius: 5,
-          offset: const Offset(0, 3),
-        ),
-      ],
-    ),
-    child: TextButton(
-      onPressed: () async {
-        String email = userEmail.text.trim();
-        String password = userPassword.text.trim();
+                    child: Container(
+                      // Responsive Width: set to 45% of the screen width
+                      width: Get.width * 0.45,
+                      // Responsive Height: set to 1/18th of the screen height
+                      height: Get.height / 18, 
+                      decoration: BoxDecoration(
+                        color: AppConstant.appScendoryColor,
+                        borderRadius: BorderRadius.circular(20.0),
+                        boxShadow: [
+                          BoxShadow(
+                            color: AppConstant.appScendoryColor.withOpacity(0.5),
+                            spreadRadius: 1,
+                            blurRadius: 5,
+                            offset: const Offset(0, 3),
+                          ),
+                        ],
+                      ),
+                      child: TextButton(
+                        onPressed: () async{
+                          String email = userEmail.text.trim();
+                          String password=userPassword.text.trim();
 
-        if (email.isEmpty || password.isEmpty) {
-          Get.snackbar(
-            "Error",
-            "Please enter all details",
-            snackPosition: SnackPosition.BOTTOM,
-            backgroundColor: AppConstant.appScendoryColor,
-            colorText: AppConstant.appTextColor,
-          );
-          return;
-        }
+                          if(email.isEmpty||password.isEmpty){
 
-        try {
-          // Sign In with Firebase
-          //UserCredential userCredential = await signInController.signInMethod(email, password);
-           UserCredential? userCredential = await signInController.signInMethod(
+                             Get.snackbar("error ", "please enter all details",
+                             snackPosition: SnackPosition.BOTTOM,
+                             backgroundColor: AppConstant.appScendoryColor,
+                             colorText: AppConstant.appTextColor,
+                            
+                            );
+
+                          }else{
+                            UserCredential? userCredential = await signInController.signInMethod(
                               email,
                              password);
 
-          if (userCredential!.user == null) {
-            Get.snackbar(
-              "Error",
-              "Invalid credentials. Please try again.",
-              snackPosition: SnackPosition.BOTTOM,
-              backgroundColor: AppConstant.appScendoryColor,
-              colorText: AppConstant.appTextColor,
-            );
-            return;
-          }
+                             var userData = await getUserDataController.getUserData(userCredential!.user!.uid);
+                             
 
-          // Fetch user data from Firestore
-          var userData = await getUserDataController.getUserData(userCredential.user!.uid);
-          print("Fetched User Data: $userData");
 
-          // Email verification check
-          if (!userCredential.user!.emailVerified) {
-            Get.snackbar(
-              "Error",
-              "Please verify your email before login.",
-              snackPosition: SnackPosition.BOTTOM,
-              backgroundColor: AppConstant.appScendoryColor,
-              colorText: AppConstant.appTextColor,
-            );
-            return;
-          }
+                               if(userCredential!=null){
+                            if (userCredential.user!.emailVerified) {
 
-          // If userData is empty or invalid
-          if (userData.isEmpty || userData[0] == null) {
-            Get.snackbar(
-              "Error",
-              "User data not found. Please try again.",
-              snackPosition: SnackPosition.BOTTOM,
-              backgroundColor: AppConstant.appScendoryColor,
-              colorText: AppConstant.appTextColor,
-            );
-            return;
-          }
+                              if(userData[0]['isAdmin'] ==true){
+                                 Get.snackbar(
+                              "Success",
+                              "login Successfully!",
+                              snackPosition: SnackPosition.BOTTOM,
+                              backgroundColor: AppConstant.appScendoryColor,
+                              colorText: AppConstant.appTextColor,
+                            );
+                                Get.offAll(()=>AdminMainScreen());
+                                
 
-          // Check if Admin or Normal User
-          if (userData[0]['isAdmin'] == true) {
-            Get.snackbar(
-              "Success",
-              "Admin login successfully!",
-              snackPosition: SnackPosition.BOTTOM,
-              backgroundColor: AppConstant.appScendoryColor,
-              colorText: AppConstant.appTextColor,
-            );
-            Get.offAll(() => AdminMainScreen());
-          } else {
-            Get.snackbar(
-              "Success",
-              "User login successfully!",
-              snackPosition: SnackPosition.BOTTOM,
-              backgroundColor: AppConstant.appScendoryColor,
-              colorText: AppConstant.appTextColor,
-            );
-            Get.offAll(() => MainScreen());
-          }
-        } catch (e) {
-          print("SignIn Error: $e");
-          Get.snackbar(
-            "Error",
-            "Login failed: $e",
-            snackPosition: SnackPosition.BOTTOM,
-            backgroundColor: AppConstant.appScendoryColor,
-            colorText: AppConstant.appTextColor,
-          );
-        }
-      },
-      child: const Text(
-        "Sign in",
-        style: TextStyle(
-          color: Colors.white,
-          fontSize: 18.0,
-          fontWeight: FontWeight.bold,
-        ),
-      ),
-    ),
-  ),
-),
+                              }else{
+                                 Get.offAll(()=>MainScreen());
+                                  Get.snackbar(
+                              "Success",
+                              "login Successfully!",
+                              snackPosition: SnackPosition.BOTTOM,
+                              backgroundColor: AppConstant.appScendoryColor,
+                              colorText: AppConstant.appTextColor,
+                            );
+                              }
+                           
+                            Get.offAll(() => MainScreen());
+                          } else {
+                            Get.snackbar(
+                              "Error",
+                              "Please verify your email before login",
+                              snackPosition: SnackPosition.BOTTOM,
+                              backgroundColor: AppConstant.appScendoryColor,
+                              colorText: AppConstant.appTextColor,
+                            );
+                          }
 
+                          }
+                          else{
+                             Get.snackbar(
+                              "Error",
+                              "Please try again",
+                              snackPosition: SnackPosition.BOTTOM,
+                              backgroundColor: AppConstant.appScendoryColor,
+                              colorText: AppConstant.appTextColor,
+                            );
+
+                          }
+                          }
+                        
+                          // _googleSignInController.signInWithGoogle();
+                        },
+                        child: const Text(
+                          "Sign in",
+                          style: TextStyle(color: Colors.white, fontSize: 18.0, fontWeight: FontWeight.bold),
+                        ),
+                      ),
+                    ),
+                  ),
 
                   // Reduced spacing before Sign Up Link
                   const SizedBox(height: 15.0),

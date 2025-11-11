@@ -2,11 +2,14 @@
 
 import 'dart:async';
 
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 //import 'package:get/get.dart';
 //import 'package:get/get_core/src/get_main.dart';
 import 'package:lottie/lottie.dart';
+import 'package:sarfibazaar/controllers/get-user-data-controller.dart';
+import 'package:sarfibazaar/screens/admin-panel/admin-main-screen.dart';
 import 'package:sarfibazaar/screens/auth-ui/sign-in-screen.dart';
 import 'package:sarfibazaar/screens/auth-ui/welcome-screen.dart';
 import 'package:sarfibazaar/screens/user-panel/main-screen.dart';
@@ -14,6 +17,7 @@ import 'package:sarfibazaar/utils/app-constant.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
+  
 
   @override
   State<SplashScreen> createState() => _SplashScreenState();
@@ -21,13 +25,33 @@ class SplashScreen extends StatefulWidget {
 
 class _SplashScreenState extends State<SplashScreen> {
 
+  User? user=FirebaseAuth.instance.currentUser;
+
   @override
   void initState() {
     super.initState();
     // 3 सेकंड बाद MainScreen पर जाना
-    Timer( Duration(seconds: 5), () {
-      Get.offAll(() => WelcomeScreen());
+    Timer( Duration(seconds: 3), () {
+      loggdin(context);
     });
+  }
+  Future<void> loggdin(BuildContext context)async{
+    if(user!=null){
+      final GetUserDataController getUserDataController =Get.put(GetUserDataController());
+
+      var userData =await  getUserDataController.getUserData(user!.uid);
+      if(userData[0]['isAdmin']==true){
+        Get.offAll(()=>AdminMainScreen());
+
+      }else{
+        Get.offAll(()=>MainScreen());
+
+      }
+
+    }else{
+      Get.to(()=>WelcomeScreen());
+
+    }
   }
 
 
